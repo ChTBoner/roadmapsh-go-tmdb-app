@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 )
@@ -58,6 +59,9 @@ func tmdb_call(mtype string) {
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		panic(err)
+	}
+	if resp.StatusCode != 200 {
+		log.Fatalln("Error Connecting to tmdb")
 	}
 	defer resp.Body.Close()
 

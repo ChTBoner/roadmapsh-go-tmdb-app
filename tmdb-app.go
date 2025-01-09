@@ -11,8 +11,10 @@ import (
 var api_prefix string = "https://api.themoviedb.org/3/movie"
 
 func main() {
+	// parse command line args
 	typePtr := flag.String("type", "top", "playing, popular, top or upcoming")
 	flag.Parse()
+
 	var mtype string
 	switch *typePtr {
 	case "top":

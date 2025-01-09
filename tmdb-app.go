@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -9,6 +10,15 @@ import (
 )
 
 var api_prefix string = "https://api.themoviedb.org/3/movie"
+
+type (
+	Result struct {
+		Title string
+	}
+	TmdbResp struct {
+		Results []Result
+	}
+)
 
 func main() {
 	// parse command line args
@@ -50,10 +60,19 @@ func tmdb_call(mtype string) {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	fmt.Println(resp.Status)
+
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(data))
+
+	var f TmdbResp
+	err = json.Unmarshal(data, &f)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, v := range f.Results {
+		fmt.Println(v.Title)
+	}
 }
